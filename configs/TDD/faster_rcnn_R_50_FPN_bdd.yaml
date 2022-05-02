@@ -1,7 +1,7 @@
 _BASE_: "../Base-RCNN-FPN.yaml"
 MODEL:
   META_ARCHITECTURE: "Two_head_TwoStagePseudoLabGeneralizedRCNN_REFINE"
-  WEIGHTS: "kitti/fft_ub_lr_1e-3_2/model_0002999.pth"
+  WEIGHTS: "bdd100k_result/fft_ub_try2/model_0008999.pth"
 
   MASK_ON: False
   RESNETS:
@@ -13,25 +13,26 @@ MODEL:
   ROI_HEADS:
     NAME: "StandardROIHeadsPseudoLab_object_relation"
     LOSS: "FocalLoss" # variant: "CrossEntropy"
-    NUM_CLASSES : 1
+    NUM_CLASSES : 8
 SOLVER:
-  LR_SCHEDULER_NAME: "WarmupTwoStageMultiStepLR"
-  STEPS: (6000, 8000, 9000, 11999)
-  FACTOR_LIST: (1, 1, 1, 1, 1)
-  MAX_ITER: 12000
+  LR_SCHEDULER_NAME: "WarmupMultiStepLR"
+  STEPS: (6000, 8000, 12100)
+  FACTOR_LIST: (1, 1,  1, 1)
+  MAX_ITER: 12100
+  IMS_PER_BATCH: 16
   IMG_PER_BATCH_LABEL: 8
   IMG_PER_BATCH_UNLABEL: 8
-  BASE_LR: 0.001
-  CHECKPOINT_PERIOD: 1000
-
+  BASE_LR: 0.01
+#  IMS_PER_BATCH: 4
+  CHECKPOINT_PERIOD: 1500
 DATALOADER:
   SUP_PERCENT: 100.0
-
 DATASETS:
   CROSS_DATASET: True
-  TRAIN_UNLABEL: ("cityscape_caronly_unlabel",)
-  TEST: ("cityscape_car_only_val",)
-  TRAIN_LABEL: ("kitti_coco_train",)
+  TRAIN_UNLABEL: ("bdd100k_train_unlabel",)
+  TEST: ("bdd100k_coco_val",)
+  TRAIN_LABEL: ("cityscape_coco_train",)
+  TRAIN: ("cityscape_coco_train",)
 
 SEMISUPNET:
   Trainer: "fft_ub_two_head_v2_object_relation"
@@ -43,8 +44,7 @@ SEMISUPNET:
   Teacher_Refine: True
 
 TEST:
-  EVAL_PERIOD: 1000
-OUTPUT_DIR: object_relation_one_head/kitti_12k_1
+  EVAL_PERIOD: 3000
 FFT_ON: True
 OBJECT_RELATION: True
 BOTH_ATTENTION: False
