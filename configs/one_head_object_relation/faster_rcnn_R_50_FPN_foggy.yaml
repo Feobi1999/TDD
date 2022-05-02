@@ -1,0 +1,49 @@
+_BASE_: "../Base-RCNN-FPN.yaml"
+MODEL:
+  META_ARCHITECTURE: "Two_head_TwoStagePseudoLabGeneralizedRCNN_REFINE"
+  WEIGHTS: "cityscape/fft_original/model_0008999.pth"
+  MASK_ON: False
+  RESNETS:
+    DEPTH: 50
+  PROPOSAL_GENERATOR:
+    NAME: "PseudoLabRPN"
+
+  RPN:
+    POSITIVE_FRACTION: 0.25
+  ROI_HEADS:
+    NAME: "StandardROIHeadsPseudoLab_object_relation"
+    LOSS: "FocalLoss" # variant: "CrossEntropy"
+    NUM_CLASSES : 8
+SOLVER:
+  LR_SCHEDULER_NAME: "WarmupTwoStageMultiStepLR"
+  STEPS: (6000, 8000, 9000, 27000)
+  FACTOR_LIST: (1, 1, 1, 1,1)
+  MAX_ITER: 27000
+  IMG_PER_BATCH_LABEL: 8
+  IMG_PER_BATCH_UNLABEL: 8
+  BASE_LR: 0.01
+  CHECKPOINT_PERIOD: 1500
+DATALOADER:
+  SUP_PERCENT: 100.0
+DATASETS:
+  CROSS_DATASET: True
+  TRAIN_UNLABEL: ("foggy_coco_2017_unlabel",)
+  TEST: ("foggy_cityscape_coco_val",)
+  TRAIN_LABEL: ("cityscape_coco_train",)
+
+SEMISUPNET:
+  Trainer: "fft_ub_two_head_v2_object_relation"
+  BBOX_THRESHOLD: 0.7
+  TEACHER_UPDATE_ITER: 1
+  BURN_UP_STEP: 0
+  EMA_KEEP_RATE: 0.9996
+  UNSUP_LOSS_WEIGHT: 2.0
+  Teacher_Refine: True
+
+TEST:
+  EVAL_PERIOD: 3000
+OUTPUT_DIR: object_relation_one_head/foggy_1
+FFT_ON: True
+OBJECT_RELATION: True
+BOTH_ATTENTION: False
+SHARE: True
