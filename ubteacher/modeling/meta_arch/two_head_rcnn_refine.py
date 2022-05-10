@@ -586,7 +586,6 @@ class Two_head_TwoStagePseudoLabGeneralizedRCNN_REFINE(GeneralizedRCNN):
                                                            feat_dim=1024, group=self.group, dim=(1024, 1024, 1024),
                                                            index=1)
 
-            # print("hhhhh2",self.group)
 
 
             box_features_1 = box_features_1 + attention_2
@@ -594,13 +593,10 @@ class Two_head_TwoStagePseudoLabGeneralizedRCNN_REFINE(GeneralizedRCNN):
             predictions_1 = self.roi_heads.box_predictor(box_features_1)
             predictions_2 = self.roi_heads_2.box_predictor(box_features_2)
 
-            proposals_roih_1, _ = self.roi_heads.box_predictor.inference(predictions=predictions_1, proposals= proposals_1)
-            proposals_roih_2, _ = self.roi_heads_2.box_predictor.inference(predictions=predictions_2, proposals= proposals_2)
+            proposals_roih_1, _ = self.roi_heads.box_predictor.inference(predictions=predictions_1, proposals= proposals_1, branch=branch)
+            proposals_roih_2, _ = self.roi_heads_2.box_predictor.inference(predictions=predictions_2, proposals= proposals_2, branch=branch)
 
             return proposals_rpn, proposals_roih_1, proposals_roih_2
-
-
-
 
 
 

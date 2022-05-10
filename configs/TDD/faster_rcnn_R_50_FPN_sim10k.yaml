@@ -34,7 +34,7 @@ DATASETS:
   TRAIN_LABEL: ("sim10k_coco_train",)
 
 SEMISUPNET:
-  Trainer: "fft_ub_two_head_v2_object_relation"
+  Trainer: "TDD"
   BBOX_THRESHOLD: 0.7
   TEACHER_UPDATE_ITER: 1
   BURN_UP_STEP: 0

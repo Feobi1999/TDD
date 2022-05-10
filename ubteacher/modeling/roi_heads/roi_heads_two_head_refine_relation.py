@@ -123,7 +123,6 @@ class StandardROIHeadsPseudoLab_object_relation(StandardROIHeadsPseudoLab_Teache
             losses = self.box_predictor.losses(predictions, proposals)
 
 
-
             if self.train_on_pred_boxes:
                 with torch.no_grad():
                     pred_boxes = self.box_predictor.predict_boxes_for_gt_classes(
@@ -134,73 +133,8 @@ class StandardROIHeadsPseudoLab_object_relation(StandardROIHeadsPseudoLab_Teache
                     ):
                         proposals_per_image.proposal_boxes = Boxes(pred_boxes_per_image)
 
-            if branch == "target_img_two_head_refine" or branch == "target_img_two_head_attention":
-                return proposals, predictions
+
             return losses, predictions
-
-
-        else:
-            if "weak_or_pseudo" in branch:
-                #
-                import pdb
-                # pdb.set_trace()
-                temperature = 100
-                scores = predictions[0]
-                softmax_score = F.softmax(scores, 1)
-                A = cosinematrix(softmax_score)
-                # A = torch.exp(torch.mm(box_features, box_features.t())/temperature)
-                # A = torch.exp(torch.mm(scores, scores.t())/temperature)
-                # A = torch.exp(torch.mm(softmax_score, softmax_score.t())/temperature)
-                A = A/A.sum(1,keepdim=True)
-                value, index = torch.topk(A,100)
-                sim_scores=scores[index]
-                sim_reg = predictions[1][index]
-
-                alpha = 0.97
-                temp = alpha*predictions[0] + (1-alpha)*torch.mm(A, predictions[0])
-                # predictions = (temp , predictions[1])
-                predictions_sim = (sim_scores, sim_reg)
-                predictions = (temp, predictions[1])
-                pred_instances, _ = self.box_predictor.inference(predictions, proposals, branch)
-
-
-
-            elif branch == "two_head_cross_refine" or branch == "teacher_img_two_head_attention":
-                return proposals, predictions
-
-            elif branch == "two_head_both_refine":
-
-                with torch.no_grad():
-
-                    temperature = 100
-                    scores = predictions[0]
-                    softmax_score = F.softmax(scores, 1)
-                    A = self.cosinematrix(softmax_score)
-
-                    A = A/A.sum(1, keepdim=True)
-
-                    alpha = self.label_refine_ratio
-                    thresh = self.label_refine_score_thresh
-                    mask_small = softmax_score < thresh
-                    mask_big = softmax_score > thresh
-
-                    temp = alpha*scores + (1-alpha)*torch.mm(A, scores)
-
-                    temp_small = temp * mask_small
-                    temp_big = scores * mask_big
-                    temp_prediction = temp_big + temp_small
-                    predictions = (temp_prediction, predictions[1])
-
-                    temp = alpha*predictions[0] + (1-alpha)*torch.mm(A, predictions[0])
-
-                    predictions = (temp, predictions[1])
-
-                return proposals, predictions
-
-
-
-
-
             pred_instances, _ = self.box_predictor.inference(predictions, proposals,branch)
             del box_features
             return pred_instances, predictions

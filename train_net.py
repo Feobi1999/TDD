@@ -48,7 +48,7 @@ def main(args):
 
 
     #use
-    elif cfg.SEMISUPNET.Trainer == "fft_ub_two_head_v2_object_relation":
+    elif cfg.SEMISUPNET.Trainer == "TDD":
         Trainer = Two_head_fft_UBTeacherTrainer_V2_object_relation
 
     else:
