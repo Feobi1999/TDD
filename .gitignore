@@ -124,6 +124,8 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
+pretrained_models
 # Pyre type checker
 .pyre/
+.DS_Store
+ubteacher/.DS_Store

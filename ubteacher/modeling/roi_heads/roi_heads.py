@@ -151,7 +151,7 @@ class StandardROIHeadsPseudoLab(StandardROIHeads):
 
 
         else:
-            pred_instances, _ = self.box_predictor.inference(predictions, proposals)
+            pred_instances, _ = self.box_predictor.inference(predictions, proposals,branch)
             # del box_features
             # return pred_instances, predictions
             return pred_instances, box_features

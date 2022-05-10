@@ -43,7 +43,7 @@ def setup(args):
 
 def main(args):
     cfg = setup(args)
-    if cfg.SEMISUPNET.Trainer == "ubteacher":
+    if cfg.SEMISUPNET.Trainer == "joint_pretrain":
         Trainer = UBTeacherTrainer
 
 
@@ -57,7 +57,7 @@ def main(args):
 
     if args.eval_only:
 
-        if cfg.SEMISUPNET.Trainer == "ubteacher":
+        if cfg.SEMISUPNET.Trainer == "joint_pretrain":
             model = Trainer.build_model(cfg)
             model_teacher = Trainer.build_model(cfg)
             ensem_ts_model = EnsembleTSModel(model_teacher, model)
