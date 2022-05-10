@@ -8,7 +8,7 @@ MODEL:
   PROPOSAL_GENERATOR:
     NAME: "PseudoLabRPN"
   ROI_HEADS:
-    NAME: "Res5ROIHeadsPseudoLab"
+    NAME: "StandardROIHeadsPseudoLab"
     LOSS: "FocalLoss" # variant: "CrossEntropy"
     NUM_CLASSES : 8
 SOLVER:
