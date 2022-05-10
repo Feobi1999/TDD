@@ -1,7 +1,7 @@
 _BASE_: "../Base-RCNN-FPN.yaml"
 MODEL:
   META_ARCHITECTURE: "Two_head_TwoStagePseudoLabGeneralizedRCNN_REFINE"
-  WEIGHTS: "../copy_ub/unbiased-teacher/sim10k/fft_bs_8/model_0008999.pth"
+  WEIGHTS: "pretrained_models/sim10k/model_0008999.pth"
 
   MASK_ON: False
   RESNETS:
