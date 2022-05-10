@@ -5,7 +5,7 @@ The implementation of our CVPR2022 paper "Cross Domain Object Detection by Targe
 Paper: https://arxiv.org/pdf/2205.01291
 
 2022.5.2
-update the test code and model.
+update the test code and model. \
 2022.5.10
 update the joint-pretrain train code and model.
 **Inference:**
