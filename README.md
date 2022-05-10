@@ -6,7 +6,8 @@ Paper: https://arxiv.org/pdf/2205.01291
 
 2022.5.2
 update the test code and model.
-
+2022.5.10
+update the joint-pretrain train code and model.
 **Inference:**
 
 `python train_net.py --eval-only --num-gpus 8 --config-file configs/TDD/***.yaml MODEL.WEIGHTS ***.pth`
