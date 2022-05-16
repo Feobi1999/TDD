@@ -85,6 +85,7 @@ class StandardROIHeadsPseudoLab_object_relation(StandardROIHeadsPseudoLab_Teache
                         features, proposals, compute_loss, compute_val_loss, targets, branch
                     )
                     return proposals_new, box_features
+
                 pred_instances, predictions = self._forward_box(
                     features, proposals, compute_loss, compute_val_loss,targets, branch
                 )
@@ -135,6 +136,7 @@ class StandardROIHeadsPseudoLab_object_relation(StandardROIHeadsPseudoLab_Teache
 
 
             return losses, predictions
+        else:
             pred_instances, _ = self.box_predictor.inference(predictions, proposals,branch)
             del box_features
             return pred_instances, predictions

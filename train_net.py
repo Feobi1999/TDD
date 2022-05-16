@@ -70,7 +70,7 @@ def main(args):
             res = Trainer.test(cfg, ensem_ts_model.modelStudent)
 
 
-        elif "two_head" in cfg.SEMISUPNET.Trainer:
+        elif "TDD" in cfg.SEMISUPNET.Trainer:
             model = Trainer.build_model(cfg)
             model_teacher = Trainer.build_model(cfg)
             ensem_ts_model = EnsembleTSModel(model_teacher, model)
@@ -101,12 +101,12 @@ def main(args):
     # init need_copy =1  ckpt contain need_copy then cover the 1 to 0
     if args.num_gpus>1:
 
-        if "two_head" in cfg.SEMISUPNET.Trainer and trainer.model.state_dict()["module.need_copy"]:
+        if "TDD" in cfg.SEMISUPNET.Trainer and trainer.model.state_dict()["module.need_copy"]:
             roi_head_dict = trainer.model.module.roi_heads.state_dict()
             trainer.model.module.roi_heads_2.load_state_dict(roi_head_dict)
             trainer.model.module.register_buffer("need_copy", torch.zeros(1).cuda())
     else:
-        if "two_head" in cfg.SEMISUPNET.Trainer and trainer.model.state_dict()["need_copy"]:
+        if "TDD" in cfg.SEMISUPNET.Trainer and trainer.model.state_dict()["need_copy"]:
             roi_head_dict = trainer.model.roi_heads.state_dict()
             trainer.model.roi_heads_2.load_state_dict(roi_head_dict)
             trainer.model.register_buffer("need_copy", torch.zeros(1).cuda())
